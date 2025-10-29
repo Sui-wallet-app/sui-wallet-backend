@@ -1,0 +1,6 @@
+Flask==3.0.3
+Flask-Cors==4.0.0
+pysui==0.52.0
+qrcode==7.4.2
+cryptography==42.0.5
+python-dotenv==1.0.0

@@ -1,0 +1,42 @@
+version: "3.8"
+services:
+  web:
+    build: .
+    container_name: sui-web
+    env_file:
+      - .env
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+      - redis
+    environment:
+      - FLASK_ENV=production
+  worker:
+    build: .
+    container_name: sui-worker
+    env_file:
+      - .env
+    command: rq worker --url redis://redis:6379
+    depends_on:
+      - web
+      - redis
+      - mongo
+  mongo:
+    image: mongo:6.0
+    container_name: sui-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+  redis:
+    image: redis:7
+    container_name: sui-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+volumes:
+  mongo-data:
+  redis-data:
